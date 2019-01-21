@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<a href="{% url 'mx:orderlist' 0 %}">未付款[{{ waitpay }}]</a>
+<a href="{% url 'mx:orderlist' 1 %}">已付款[{{ paydone }}]</a>
+</body>
+</html>

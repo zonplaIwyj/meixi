@@ -1,0 +1,4 @@
+Django==1.11
+pycryptodome==3.7.3
+PyMySQL==0.9.3
+pytz==2018.7

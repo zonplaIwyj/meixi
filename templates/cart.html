@@ -1,0 +1,260 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title class="star"></title>
+    <link rel="stylesheet" href="{% static 'css/shouwei.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/cart.css' %}" type="text/css">
+    <script src="{% static 'js/jquery-1.12.3.js' %}"></script>
+    <script src="{% static 'js/jquery.cookie.js' %}"></script>
+    <script src="{% static 'js/headerbar.js' %}"></script>
+    <script src="{% static 'js/cart.js' %}"></script>
+
+</head>
+<body>
+
+<div class="header">
+    <div class="headerbar">
+        <div class="hb_content">
+            <div class="hb_con_left">
+                {% if users %}
+                    <a href="{% url 'mx:mine' %}" class="register">{{ users.phone }}</a>
+                    <a href="{% url 'mx:logout' %}" class="login">退出</a>
+                    <a href="{% url 'mx:mine' %}">订单查询</a>
+                {% else %}
+                    <a href="{% url 'mx:register' %}" class="register">注册</a>
+                    <a href="{% url 'mx:login' %}" class="login">登录</a>
+                {% endif %}
+            </div>
+            <div class="hb_con_right">
+                <p>客服热线：4000-250-630</p>
+                <div class="follow">
+                    <img src="{% static 'img/star.png' %}">
+                    <span>关注我们</span>
+                    <div class="share">
+                        <a href="" class="sina">
+                            <img src="{% static 'img/fou_sina.gif' %}">
+                            <span>新浪微博</span>
+                        </a>
+                        <a href="" class="weixin">
+                            <img src="{% static 'img/fou_wechat.gif' %}">
+                            <span>美西微信</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="bag">
+                    <a href="{% url 'mx:cart' %}">
+                        <div class="bag_n">
+                            <img src="{% static 'img/shopping.png' %}" class="bag_icon">
+                            <span>购物袋（<t style="color: #8E0C3A;">{{ csn }}</t>）</span>
+                            <img class="arrow" src="{% static 'img/xiabiao.png' %}">
+                        </div>
+                    </a>
+
+
+                   {% if users %}
+                        <div class="cart">
+                            {% if csn %}
+                                <p class="new_cart">有新的商品加入 快去购物袋查看吧</p>
+                            {% else %}
+                                <div class="cart_n">
+                                    您的购物袋是空的
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="header_top">
+    <div class="meiciapp">
+        <a href=""><img src="{% static 'img/ewm_indexTop.png' %}"></a>
+        <span><img src="{% static 'img/ewm_txt.png' %}"></span>
+    </div>
+    <div class="logo">
+        <img src="{% static 'img/logo_new.png' %}">
+    </div>
+</div>
+</div>
+
+<div class="content">
+    <div class="cart_img">
+        <img src="{% static 'img/cart_sub.gif' %}">
+    </div>
+    {% if carts %}
+        <div class="cart_ok">
+            <div class="orderTips">
+                <div class="orderTips_m">
+                    <span class="goods_success"></span>
+                </div>
+            </div>
+            <div class="cart_pro">
+                <table width="100%">
+                    <tbody>
+                    <tr>
+                        <th width="60px">
+                            <div class="checkall" isall="true">
+                                <img class="selfok" src="{% static 'img/ok.png' %}" alt="">
+                            </div>
+                        </th>
+                        <th width="200px">商品图片</th>
+                        <th width="100px">商品名称</th>
+                        <th width="260px">数量</th>
+                        <th width="60px">单价</th>
+                        <th width="175px">总价</th>
+                        <th>操作</th>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="cart_list">
+                {% for cart in carts %}
+                    <table width="100%" class="carttab">
+                        <tbody>
+                        <tr class="cartneir">
+                            <th width="60px">
+                                <div class="checkself" isselect="{{ cart.isselect }}" cartid="{{ cart.id }}">
+                                    {% if cart.isselect %}
+                                        <img class="isok" src="{% static 'img/ok.png' %}" alt="">
+                                    {% else %}
+                                        <img src="{% static 'img/no.png' %}" alt="">
+                                    {% endif %}
+                                </div>
+                            </th>
+                            <th width="200px"><img width="48px" src="{% static cart.goods.img %}" alt=""></th>
+                            <th width="100px">{{ cart.goods.name }}</th>
+                            <th width="260px">
+                                <div class="g_r_num">
+                                    <div class="g_r_num_d1">
+                                        <span class="g_r_num_d1_l" goodid="{{ cart.goods.id }}">-</span>
+                                        <input type="text" class="g_r_num_d1_c" disabled="readonly"
+                                               value="{{ cart.num }}">
+                                        <span class="g_r_num_d1_r" goodid="{{ cart.goods.id }}">+</span>
+
+                                    </div>
+                                </div>
+                            </th>
+                            <th width="60px" class="price">{{ cart.goods.price }}</th>
+                            <th width="175px"><span class="prices"></span></th>
+                            <th class="removegood" goodid="{{ cart.goods.id }}">删除</th>
+                        </tr>
+                        </tbody>
+                    </table>
+                {% endfor %}
+            </div>
+
+            <div class="cart_price">
+                <p>总计：</p><span id="ssmp"></span>
+                <span class="pay_goods"></span>
+            </div>
+            <div class="pay">
+                <button class="jiesuan"></button>
+            </div>
+
+        </div>
+    {% else %}
+        <a href="{% url 'mx:goods' 1 %}">        <div class="cart_none">
+            <div class="cart_none_user">
+                <h3>购物袋内暂时没有商品,点击查看最新单品</h3>
+            </div>
+        </div></a>
+    {% endif %}
+
+</div>
+
+
+<div class="all"></div>
+<div class="success">
+    支付成功!
+    <p class="back">返回购物袋&lt;&lt; </p>
+</div>
+<div class="pay_success">
+    <div class="pay_true">
+        <p>您要结算吗?</p>
+    </div>
+    <button class="true">确定</button>
+    <button class="false">取消</button>
+</div>
+<div class="footer">
+    <div class="help">
+        <ul>
+            <li class="help_title">购物指南</li>
+            <li><a href="">购物流程</a></li>
+            <li><a href="">配送方式</a></li>
+        </ul>
+        <ul>
+            <li class="help_title">支付方式</li>
+            <li><a href="">如何付款</a></li>
+            <li><a href="">发票制度</a></li>
+        </ul>
+        <ul>
+            <li class="help_title">商品说明</li>
+            <li><a href="">商品尺码</a></li>
+            <li><a href="">商品包装</a></li>
+        </ul>
+        <ul>
+            <li class="help_title">客服中心</li>
+            <li><a href="">七天退还</a></li>
+            <li><a href="">常见问题</a></li>
+        </ul>
+        <ul class="help_mid">
+            <li style="padding-top: 13px;line-height: 26px;">
+                <h5>订购热线</h5>
+                <br>
+                <h4>4000-250-630</h4>
+            </li>
+        </ul>
+        <ul class="help_mid" style="width: 145px;">
+            <li style="padding-top: 13px;">
+                <span>在线客服</span>
+                <div class="tel">
+                    <a href=""><img src="{% static 'img/tencent.png' %}"></a>
+                    <a href=""><img src="{% static 'img/erji.png' %}"></a>
+                </div>
+            </li>
+        </ul>
+        <ul class="help_mid" style="width: 190px;">
+            <li class="scan">
+                <p>美西时尚APP</p>
+                <img src="{% static 'img/ewm_indexTop.png' %}">
+            </li>
+            <li class="scan" style="width: 72px;">
+                <p>关注我们</p>
+                <img src="{% static 'img/ewm_wx.png' %}" style="margin: 0;">
+            </li>
+        </ul>
+    </div>
+    <div class="sub_nav">
+        <ul class="clearfix">
+            <li><a href="{% url 'mx:index' %}" class="clearfix_a">首页</a></li>
+            <li><a href="" class="clearfix_a">关于美西</a></li>
+            <li><a href="" class="clearfix_a">媒体报道</a></li>
+            <li><a href="" class="clearfix_a">正品保障</a></li>
+            <li><a href="" class="clearfix_a">业务合作</a></li>
+            <li><a href="" class="clearfix_a">隐私声明</a></li>
+            <li><a href="" class="clearfix_a">加入美西</a></li>
+            <li><a href="" class="clearfix_a">网站地图</a></li>
+            <li><a href="" class="clearfix_a">联系我们</a></li>
+        </ul>
+    </div>
+    <div class="copyright">
+        <p>
+            Copyright © 2008-2016 美西时尚-
+            <a href="">高端时尚生活电商</a>
+        </p>
+        <p>
+            <a href="">
+                沪ICP备09001221号
+            </a>
+        </p>
+    </div>
+    <div class="safe">
+        <a href=""><img src="{% static 'img/hy_83x30.png' %}"></a>
+        <a href=""><img src="{% static 'img/ssgs.gif' %}"></a>
+    </div>
+</div>
+</body>
+</html>

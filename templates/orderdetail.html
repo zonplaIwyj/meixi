@@ -1,0 +1,30 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订单详情</title>
+    <script src="{% static 'js/jquery-1.12.3.js' %}"></script>
+    <script src="{% static 'js/orderdetail.js' %}"></script>
+</head>
+<body>
+订单号：{{ order.identifier }}
+<br>
+
+{% for ordergoods in order.ordergoods_set.all %}
+    <img src="{% static ordergoods.goods.img %}" alt="">
+    {{ ordergoods.goods.name }}
+    {{ ordergoods.goods.gray }}
+    {{ ordergoods.goods.price }}
+    {{ ordergoods.num }}
+{% endfor %}
+<br>
+<p><a href="{% url 'mx:cart' %}">返回购物车</a></p>
+{% if order.status == 0 %}
+    <div id="pay" identifier="{{ order.identifier }}">
+    付款
+    <div/>
+{% endif %}
+
+
+</body>
+</html>

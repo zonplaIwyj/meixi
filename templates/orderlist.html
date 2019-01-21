@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for order in orders %}
+    <a href="{% url 'mx:orderdetail' order.identifier %}">{{ forloop.counter }}|{{ order.identifier }}</a>
+    <span>
+    {% if order.status == 0 %}
+        未付款
+    {% elif order.status == 1 %}
+        已付款
+    {% endif %}
+    </span>
+    <br>
+{% endfor %}
+
+</body>
+</html>
